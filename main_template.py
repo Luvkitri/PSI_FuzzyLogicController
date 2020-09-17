@@ -183,8 +183,8 @@ while not control.WantExit:
 
     # * 2. RULES
     # IF pole_angle IS zero THEN force is zero
-    # IF pole_angle IS negative THEN force is positive
-    # IF pole_angle IS positive THEN force is negative
+    # IF pole_angle IS negative THEN force is negative
+    # IF pole_angle IS positive THEN force is positive
 
     # There is no logical operators
 
