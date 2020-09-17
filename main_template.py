@@ -53,11 +53,21 @@ env.unwrapped.viewer.window.on_key_press = on_key_press
 pole_angle_range = np.arange(-180.0, 180.1, 0.1)
 
 # Pole angle membership functions
-pole_angle_negative = fuzz.zmf(pole_angle_range, -10, 0)
-pole_angle_zero = fuzz.trimf(pole_angle_range, [-10, 0, 10])
-pole_angle_positive = fuzz.smf(pole_angle_range, 0, 10)
+pole_angle_modifier = 0.1
 
-if True:
+pole_angle_negative = fuzz.zmf(pole_angle_range, -1.0 * pole_angle_modifier, 0)
+pole_angle_zero = fuzz.trimf(pole_angle_range, [-1.0 * pole_angle_modifier, 0, pole_angle_modifier])
+pole_angle_positive = fuzz.smf(pole_angle_range, 0, pole_angle_modifier)
+
+# * FORCE
+# Domain of force
+force_range = np.arange(-10.0, 10.01, 0.01)
+force_modifier = 2.0
+
+force_negative = fuzz.zmf(force_range, -1 * force_modifier, 0)
+force_zero = fuzz.trimf(force_range, [-1.0 * force_modifier, 0, force_modifier])
+force_positive = fuzz.smf(force_range, 0, force_modifier)
+
 fig, (ax0) = plt.subplots(nrows=1, figsize=(8, 9))
 
     ax0.plot(pole_angle_range, pole_angle_negative, 'b', linewidth=1.5, label='Negative')
