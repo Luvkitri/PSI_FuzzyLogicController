@@ -48,7 +48,14 @@ env.unwrapped.viewer.window.on_key_press = on_key_press
 2. Zdefiniuj funkcje przynależności dla wybranych przez siebie zmiennych lingwistycznych.
 3. Wyświetl je, w celach diagnostycznych.
 
-Przykład wyświetlania:
+# * POLE ANGLE
+# Domain of pole angle
+pole_angle_range = np.arange(-180.0, 180.1, 0.1)
+
+# Pole angle membership functions
+pole_angle_negative = fuzz.zmf(pole_angle_range, -10, 0)
+pole_angle_zero = fuzz.trimf(pole_angle_range, [-10, 0, 10])
+pole_angle_positive = fuzz.smf(pole_angle_range, 0, 10)
 
 fig, (ax0) = plt.subplots(nrows=1, figsize=(8, 9))
 
