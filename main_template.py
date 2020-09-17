@@ -57,18 +57,9 @@ pole_angle_range = np.arange(-180.0, 180.1, 0.1)
 # Pole angle membership functions
 pole_angle_modifier = 0.1
 
-pole_angle_negative = fuzz.zmf(pole_angle_range, -1.0 * pole_angle_modifier, 0)
-pole_angle_zero = fuzz.trimf(pole_angle_range, [-1.0 * pole_angle_modifier, 0, pole_angle_modifier])
-pole_angle_positive = fuzz.smf(pole_angle_range, 0, pole_angle_modifier)
-
-# * FORCE
-# Domain of force
-force_range = np.arange(-10.0, 10.01, 0.01)
-force_modifier = 2.0
-
-force_negative = fuzz.zmf(force_range, -1 * force_modifier, 0)
-force_zero = fuzz.trimf(force_range, [-1.0 * force_modifier, 0, force_modifier])
-force_positive = fuzz.smf(force_range, 0, force_modifier)
+pole_angle_negative = fuzz.zmf(pole_angle_range, -1.0 * pole_angle_modifier, 0.0)
+pole_angle_zero = fuzz.trimf(pole_angle_range, [-1.0 * pole_angle_modifier, 0.0, pole_angle_modifier])
+pole_angle_positive = fuzz.smf(pole_angle_range, 0.0, pole_angle_modifier)
 
 if False:
     fig, (ax0) = plt.subplots(nrows=1, figsize=(8, 9))
@@ -82,6 +73,49 @@ if False:
     plt.tight_layout()
     plt.show()
 
+# * FORCE
+# Domain of force
+force_range = np.arange(-10.0, 10.01, 0.01)
+force_modifier = 2.0
+
+# Force membership functions
+force_negative = fuzz.zmf(force_range, -1.0 * force_modifier, 0.0)
+force_zero = fuzz.trimf(force_range, [-1.0 * force_modifier, 0.0, force_modifier])
+force_positive = fuzz.smf(force_range, 0.0, force_modifier)
+
+if False:
+    fig, (ax0) = plt.subplots(nrows=1, figsize=(8, 9))
+
+    ax0.plot(force_range, force_negative, 'b', linewidth=1.5, label='Negative')
+    ax0.plot(force_range, force_zero, 'g', linewidth=1.5, label='Zero')
+    ax0.plot(force_range, force_positive, 'r', linewidth=1.5, label='Positive')
+    ax0.set_title('Force')
+    ax0.legend()
+
+    plt.tight_layout()
+    plt.show()
+
+# * CART POSITION
+# Domain of cart position
+cart_position_range = np.arange(-5.0, 5.0, 0.01)
+cart_position_modifier = 0.3
+
+# Cart position membership functions
+cart_position_negative = fuzz.zmf(cart_position_range, -1.0 * cart_position_modifier, 0.0)
+cart_position_zero = fuzz.trimf(cart_position_range, [-1.0 * cart_position_modifier, 0.0, cart_position_modifier])
+cart_position_positive = fuzz.smf(cart_position_range, 0.0, cart_position_modifier)
+
+if False:
+    fig, (ax0) = plt.subplots(nrows=1, figsize=(8, 9))
+
+    ax0.plot(cart_position_range, cart_position_negative, 'b', linewidth=1.5, label='Negative')
+    ax0.plot(cart_position_range, cart_position_zero, 'g', linewidth=1.5, label='Zero')
+    ax0.plot(cart_position_range, cart_position_positive, 'r', linewidth=1.5, label='Positive')
+    ax0.set_title('Cart Position')
+    ax0.legend()
+
+    plt.tight_layout()
+    plt.show()
 
 #########################################################
 # KONIEC KODU INICJUJĄCEGO
