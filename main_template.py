@@ -214,26 +214,35 @@ while not control.WantExit:
     u_pole_angle_negative = fuzz.interp_membership(pole_angle_range, pole_angle_negative, pole_angle)
     u_pole_angle_zero = fuzz.interp_membership(pole_angle_range, pole_angle_zero, pole_angle)
     u_pole_angle_positive = fuzz.interp_membership(pole_angle_range, pole_angle_positive, pole_angle)
-
+    
     u_cart_position_negative = fuzz.interp_membership(cart_position_range, cart_position_negative, cart_position)
     u_cart_position_zero = fuzz.interp_membership(cart_position_range, cart_position_zero, cart_position)
     u_cart_position_positive = fuzz.interp_membership(cart_position_range, cart_position_positive, cart_position)
 
     # * 2. RULES
-    # IF pole_angle IS negative THEN force is negative
-    # IF pole_angle IS positive THEN force is positive
-
-    # There is no logical operators
+    # IF pole_angle IS negative THEN force IS negative
+    # IF pole_angle IS positive THEN force IS positive
+    # IF pole_angle IS negative AND cart_position IS positive THEN force IS positive
+    # IF pole_angle IS positive AND cart_position IS negative THEN force IS negatvie
+    # IF pole_angle IS zero AND cart_postion IS zero THEN force IS zero
+    
+    r1 = u_pole_angle_negative
+    r2 = u_pole_angle_positive
+    r3 = min(u_pole_angle_negative, u_cart_position_positive)
+    r4 = min(u_pole_angle_positive, u_cart_position_negative)
+    r5 = min(u_pole_angle_zero, u_cart_position_zero)
 
     # * 3. RULES AGREGATION
 
-    # There is no rule with the same outcome
+    negative = max(r1, r4)
+    zero = r5
+    positive = max(r2, r3)
 
     # * 4. MAMDANI'S FUZZY INFERENCE METHOD
 
-    u_force_negative = np.fmin(force_negative, u_pole_angle_negative)
-    u_force_zero = np.fmin(force_zero, u_pole_angle_zero)
-    u_force_positive = np.fmin(force_positive, u_pole_angle_positive)
+    u_force_negative = np.fmin(force_negative, negative)
+    u_force_zero = np.fmin(force_zero, zero)
+    u_force_positive = np.fmin(force_positive, positive)
 
     # * 5. AGREGATE ALL ACTIVATIONS
 
