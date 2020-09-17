@@ -215,6 +215,9 @@ while not control.WantExit:
     u_pole_angle_zero = fuzz.interp_membership(pole_angle_range, pole_angle_zero, pole_angle)
     u_pole_angle_positive = fuzz.interp_membership(pole_angle_range, pole_angle_positive, pole_angle)
 
+    u_cart_position_negative = fuzz.interp_membership(cart_position_range, cart_position_negative, cart_position)
+    u_cart_position_zero = fuzz.interp_membership(cart_position_range, cart_position_zero, cart_position)
+    u_cart_position_positive = fuzz.interp_membership(cart_position_range, cart_position_positive, cart_position)
 
     # * 2. RULES
     # IF pole_angle IS negative THEN force is negative
