@@ -4,7 +4,7 @@
 # Opis: Szablon kodu do stabilizacji odwróconego wahadła (patyka) w pozycji pionowej podczas ruchu wózka.
 #
 
-import gym # Instalacja: https://github.com/openai/gym
+import gym  # Instalacja: https://github.com/openai/gym
 import time
 from helper import HumanControl, Keys, CartForce
 import matplotlib.pyplot as plt
@@ -26,15 +26,16 @@ def on_key_press(key: int, mod: int):
     global control
     force = 10
     if key == Keys.LEFT:
-        control.UserForce = force * CartForce.UNIT_LEFT # krok w lewo
+        control.UserForce = force * CartForce.UNIT_LEFT  # krok w lewo
     if key == Keys.RIGHT:
-        control.UserForce = force * CartForce.UNIT_RIGHT # krok w prawo
-    if key == Keys.P: # pauza
+        control.UserForce = force * CartForce.UNIT_RIGHT  # krok w prawo
+    if key == Keys.P:  # pauza
         control.WantPause = True
-    if key == Keys.R: # restart
+    if key == Keys.R:  # restart
         control.WantReset = True
-    if key == Keys.ESCAPE or key == Keys.Q: # wyjście
+    if key == Keys.ESCAPE or key == Keys.Q:  # wyjście
         control.WantExit = True
+
 
 env.unwrapped.viewer.window.on_key_press = on_key_press
 
@@ -48,6 +49,7 @@ env.unwrapped.viewer.window.on_key_press = on_key_press
 2. Zdefiniuj funkcje przynależności dla wybranych przez siebie zmiennych lingwistycznych.
 3. Wyświetl je, w celach diagnostycznych.
 
+"""
 # * POLE ANGLE
 # Domain of pole angle
 pole_angle_range = np.arange(-180.0, 180.1, 0.1)
@@ -68,16 +70,17 @@ force_negative = fuzz.zmf(force_range, -1 * force_modifier, 0)
 force_zero = fuzz.trimf(force_range, [-1.0 * force_modifier, 0, force_modifier])
 force_positive = fuzz.smf(force_range, 0, force_modifier)
 
-fig, (ax0) = plt.subplots(nrows=1, figsize=(8, 9))
+if False:
+    fig, (ax0) = plt.subplots(nrows=1, figsize=(8, 9))
 
     ax0.plot(pole_angle_range, pole_angle_negative, 'b', linewidth=1.5, label='Negative')
     ax0.plot(pole_angle_range, pole_angle_zero, 'g', linewidth=1.5, label='Zero')
     ax0.plot(pole_angle_range, pole_angle_positive, 'r', linewidth=1.5, label='Positive')
     ax0.set_title('Pole Angle')
-ax0.legend()
+    ax0.legend()
 
-plt.tight_layout()
-plt.show()
+    plt.tight_layout()
+    plt.show()
 
 
 #########################################################
@@ -107,7 +110,6 @@ while not control.WantExit:
         control.WantReset = False
         env.reset()
 
-
     ###################################################
     # ALGORYTM REGULACJI - do wypełnienia
     ##################################################
@@ -129,8 +131,7 @@ while not control.WantExit:
         ruchem jednostajnym.
     """
 
-    cart_position, cart_velocity, pole_angle, tip_velocity = env.state # Wartości zmierzone
-
+    cart_position, cart_velocity, pole_angle, tip_velocity = env.state  # Wartości zmierzone
 
     """
     
@@ -172,7 +173,38 @@ while not control.WantExit:
     
     """
 
-    fuzzy_response = CartForce.IDLE_FORCE # do zmiennej fuzzy_response zapisz wartość siły, jaką chcesz przyłożyć do wózka.
+    # do zmiennej fuzzy_response zapisz wartość siły, jaką chcesz przyłożyć do wózka.
+    fuzzy_response = CartForce.IDLE_FORCE
+
+    # * 1. FUZZIFICATION 
+    u_pole_angle_negative = fuzz.interp_membership(pole_angle_range, pole_angle_negative, pole_angle)
+    u_pole_angle_zero = fuzz.interp_membership(pole_angle_range, pole_angle_zero, pole_angle)
+    u_pole_angle_positive = fuzz.interp_membership(pole_angle_range, pole_angle_positive, pole_angle)
+
+    # * 2. RULES
+    # IF pole_angle IS zero THEN force is zero
+    # IF pole_angle IS negative THEN force is positive
+    # IF pole_angle IS positive THEN force is negative
+
+    # There is no logical operators
+
+    # * 3. RULES AGREGATION
+
+    # There is no rule with the same outcome
+
+    # * 4. MAMDANI'S FUZZY INFERENCE METHOD
+
+    u_force_negative = np.fmin(force_negative, u_pole_angle_negative)
+    u_force_zero = np.fmin(force_zero, u_pole_angle_zero)
+    u_force_positive = np.fmin(force_positive, u_pole_angle_positive)
+
+    # * 5. AGREGATE ALL ACTIVATIONS
+
+    result = np.maximum.reduce([u_force_negative, u_force_zero, u_force_positive])
+
+    # * 6. DEFUZZIFICATION
+
+    fuzzy_response = fuzz.centroid(force_range, result)
 
     #
     # KONIEC algorytmu regulacji
@@ -201,4 +233,3 @@ while not control.WantExit:
 #
 # Zostaw ten patyk!
 env.close()
-
