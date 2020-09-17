@@ -57,18 +57,18 @@ pole_angle_negative = fuzz.zmf(pole_angle_range, -10, 0)
 pole_angle_zero = fuzz.trimf(pole_angle_range, [-10, 0, 10])
 pole_angle_positive = fuzz.smf(pole_angle_range, 0, 10)
 
+if True:
 fig, (ax0) = plt.subplots(nrows=1, figsize=(8, 9))
 
-ax0.plot(x_variable, variable_left, 'b', linewidth=1.5, label='Left')
-ax0.plot(x_variable, variable_zero, 'g', linewidth=1.5, label='Zero')
-ax0.plot(x_variable, variable_right, 'r', linewidth=1.5, label='Right')
-ax0.set_title('Angle')
+    ax0.plot(pole_angle_range, pole_angle_negative, 'b', linewidth=1.5, label='Negative')
+    ax0.plot(pole_angle_range, pole_angle_zero, 'g', linewidth=1.5, label='Zero')
+    ax0.plot(pole_angle_range, pole_angle_positive, 'r', linewidth=1.5, label='Positive')
+    ax0.set_title('Pole Angle')
 ax0.legend()
-
 
 plt.tight_layout()
 plt.show()
-"""
+
 
 #########################################################
 # KONIEC KODU INICJUJĄCEGO
